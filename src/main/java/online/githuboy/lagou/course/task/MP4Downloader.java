@@ -16,7 +16,7 @@ import online.githuboy.lagou.course.decrypt.AliPlayerDecrypt;
 import online.githuboy.lagou.course.decrypt.PlayAuth;
 import online.githuboy.lagou.course.utils.HttpUtils;
 
-import java.io.File;
+import java.io.*;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -102,19 +102,33 @@ public class MP4Downloader implements Runnable, NamedTask, MediaLoader {
             String api = "https://vod.cn-shanghai.aliyuncs.com/?" + queryString;
             String body1 = HttpRequest.get(api).execute().body();
 
-            System.out.println(stringToSign);
-            System.out.println(api);
+//            System.out.println(stringToSign);
+//            System.out.println(api);
 //            System.out.println(stringify);
             System.out.println("\n\nAPI request result:\n\n" + body1);
             JSONObject mediaObj = JSON.parseObject(body1);
             if (mediaObj.getString("Code") != null) throw new RuntimeException("获取媒体信息失败");
+            JSONObject videoBase = mediaObj.getJSONObject("VideoBase");
             JSONObject playInfoList = mediaObj.getJSONObject("PlayInfoList");
             JSONArray playInfos = playInfoList.getJSONArray("PlayInfo");
             if (playInfos.size() > 0) {
                 JSONObject playInfo = playInfos.getJSONObject(0);
                 String mp4Url = playInfo.getString("PlayURL");
-                log.info("解析到MP4播放地址:{}", mp4Url);
-                HttpRequest.get(mp4Url).execute().writeBody(new File(workDir, videoName + ".mp4"), new StreamProgress() {
+                log.info("输出MP4地址 {}, title:{}, url:{}", videoName,videoBase.getString("Title"),mp4Url);
+
+                // yb-输出MP4地址到文件
+                try {
+                    FileWriter fw = new FileWriter("D:\\LagouLessons\\machineLearning\\download.txt", true);
+                    BufferedWriter bw = new BufferedWriter(fw);
+                    bw.append(videoName + ",  title:" + videoBase.getString("Title")+ ",  url:" + mp4Url +"\r\n");
+                    bw.close();
+                    fw.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                // 视频下载暂时注释掉
+                /*HttpRequest.get(mp4Url).execute().writeBody(new File(workDir, videoName + ".mp4"), new StreamProgress() {
                     @Override
                     public void start() {
                         System.out.println("开始下载视频:" + videoName);
@@ -130,7 +144,7 @@ public class MP4Downloader implements Runnable, NamedTask, MediaLoader {
                         Stats.remove(videoName);
                         latch.countDown();
                     }
-                });
+                });*/
             }
             //latch.countDown();
         } catch (Exception e) {

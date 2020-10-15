@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import jdk.nashorn.internal.objects.NativeString;
 import online.githuboy.lagou.course.CookieStore;
 import online.githuboy.lagou.course.utils.HttpUtils;
-import sun.misc.BASE64Encoder;
+import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -46,7 +46,9 @@ public class AliPlayerDecrypt {
         {
             int cIdx = key.indexOf(charCode);
             if (-1 != cIdx)
+            {
                 keyLength = cIdx;
+            }
         }
         int[] result = new int[keyLength * 2];
         int i = 0;
@@ -76,7 +78,10 @@ public class AliPlayerDecrypt {
         String body = HttpUtils.get("https://gate.lagou.com/v1/neirong/kaiwu/getLessonPlayHistory?lessonId=300&isVideo=true", CookieStore.getCookie()).header("x-l-req-header", "{deviceType:1}").execute().body();
         JSONObject jsonObject = JSON.parseObject(body);
         System.out.println(body);
-        if (jsonObject.getInteger("state") != 1) throw new RuntimeException(body);
+        if (jsonObject.getInteger("state") != 1)
+        {
+            throw new RuntimeException(body);
+        }
         String aliPlayAuth = jsonObject.getJSONObject("content").getJSONObject("mediaPlayInfoVo").getString("aliPlayAuth");
         EncryptedData d = AliPlayerDecrypt.authKeyToEncryptData(aliPlayAuth);
         String stringify = WordCodec.stringify(d);
@@ -200,7 +205,7 @@ public class AliPlayerDecrypt {
         if (bytes == null || bytes.length == 0) {
             return null;
         }
-        return new String(new BASE64Encoder().encode(bytes));
+        return new String(Base64.encodeBase64String(bytes));
     }
 
     /*生成当前UTC时间戳Time*/

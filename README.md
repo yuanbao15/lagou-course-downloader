@@ -1,7 +1,7 @@
 # lagou-course-downloader
 拉勾网课程视频下载工具
 
-本程序仅供学习交流使用
+本程序仅供学习交流使用，来源：https://github.com/SweetInk/lagou-course-downloader
 
 最后更新时间: 2020年8月7日
 
@@ -51,7 +51,7 @@ Lagou课程的视频现托管在阿里云，[相关文档](https://help.aliyun.c
 
 ![](http://ww1.sinaimg.cn/large/005ViNx8ly1g5mdhltkh8j31yy0mf11q.jpg)
 
-把上图中Cookie值，复制粘贴到`CookieStore.java`中`cookie` 字段中.
+把上图中Cookie值，复制粘贴到`CookieStore.java`中`cookie` 字段中.(方法不用限定为getkey，随意一个请求方法即可。它们的cookie是一致的，在上方还有courseId的编号需要记下下面会用到。)
 
 替换`Downloader.java`代码中的`courseId`,`savePath`中的值为实际的值.
 
@@ -61,4 +61,10 @@ String savePath = "视频保存位置";
 Downloader downloader = new Downloader(courseId, savePath);
 downloader.start();
 ```
-5. 运行`Downloader#main()` 方法.
+保存路径需要先行创建好，如：D:\\LagouLessons\\machineLearning\\
+
+在machineLearning文件夹内要先创建一个文件：download.txt   （用于保存解析的视频地址，保存的路径也要随着项目路径变化而变化）
+
+5. 运行`Downloader#main()` 方法.（项目中启动类可能有多个，注意选择Downloader启动。）
+
+6. 最终效果为，能生成课程下的课程目录空壳和一个写着MP4下载地址的dowload.txt，需要再自行通过迅雷下载，可全部拷贝粘贴到迅雷中，即可下载所有。

@@ -15,6 +15,7 @@ import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -54,7 +55,7 @@ public class Downloader {
     public Downloader(String courseId, String savePath) {
         this.courseId = courseId;
         this.savePath = savePath;
-        this.courseUrl = String.format(COURSE_INFO_API, courseId);
+        this.courseUrl = MessageFormat.format(COURSE_INFO_API, courseId);
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -65,8 +66,8 @@ public class Downloader {
             log.error("{}", e.getMessage());
             return;
         }
-        String courseId = "拉钩课程ID";
-        String savePath = "下载好的视频保存目录";
+        String courseId = "15"; // 课程id
+        String savePath = "D:\\LagouLessons\\machineLearning\\"; // 下载好的视频保存目录
         Downloader downloader = new Downloader(courseId, savePath);
         Thread logThread = new Thread(() -> {
             while (true) {
@@ -133,7 +134,7 @@ public class Downloader {
                 log.info("解析到课程信息：name：{},appId:{},fileId:{}", lessonName, appId, fileId);
             }
         }
-        System.out.println(1);
+        System.out.println("==============课程目录解析完毕================");
     }
 
     @Deprecated
