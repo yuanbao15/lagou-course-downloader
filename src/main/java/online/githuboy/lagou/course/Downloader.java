@@ -66,8 +66,8 @@ public class Downloader {
             log.error("{}", e.getMessage());
             return;
         }
-        String courseId = "15"; // 课程id
-        String savePath = "D:\\LagouLessons\\machineLearning\\"; // 下载好的视频保存目录
+        String courseId = "287"; // 课程id
+        String savePath = "D:\\LagouLessons\\GoMicroservices\\"; // 下载好的视频保存目录
         Downloader downloader = new Downloader(courseId, savePath);
         Thread logThread = new Thread(() -> {
             while (true) {
@@ -89,6 +89,8 @@ public class Downloader {
         start = System.currentTimeMillis();
         parseLessonInfo2();
         parseVideoInfo();
+
+        Thread.sleep(10*1000); // 先完成解析再输出MP4地址
         downloadMedia();
 
     }
@@ -191,11 +193,11 @@ public class Downloader {
     }
 
     private void downloadMedia() throws InterruptedException {
-        latch.await();
+//        latch.await();
         if (mediaLoaders.size() != lessonInfoList.size()) {
             log.info("视频META信息没有全部下载成功: success:{},total:{}", mediaLoaders.size(), lessonInfoList.size());
-            tryTerminal();
-            return;
+//            tryTerminal();
+//            return;
         }
         log.info("所有视频META信息获取成功 total：{}", mediaLoaders.size());
         CountDownLatch all = new CountDownLatch(mediaLoaders.size());

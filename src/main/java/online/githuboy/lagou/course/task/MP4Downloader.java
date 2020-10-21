@@ -118,7 +118,7 @@ public class MP4Downloader implements Runnable, NamedTask, MediaLoader {
 
                 // yb-输出MP4地址到文件
                 try {
-                    FileWriter fw = new FileWriter("D:\\LagouLessons\\machineLearning\\download.txt", true);
+                    FileWriter fw = new FileWriter("D:\\LagouLessons\\GoMicroservices\\download.txt", true);
                     BufferedWriter bw = new BufferedWriter(fw);
                     bw.append(videoName + ",  title:" + videoBase.getString("Title")+ ",  url:" + mp4Url +"\r\n");
                     bw.close();
